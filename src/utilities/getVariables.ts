@@ -22,7 +22,7 @@ const extractVariable = (variable, value) => {
       category: getVariableTypeByValue(Object.values(resolvedAlias.valuesByMode)[0]),
       values: `{${collection.name.toLowerCase()}.${changeNotation(resolvedAlias.name, '/', '.')}}`,
 
-      // this is being stored so we can properly update the design tokens later to account for all 
+      // this is being stored so we can properly update the design tokens later to account for all
       // modes when using aliases
       aliasCollectionName: collection.name.toLowerCase(),
       aliasModes: collection.modes
@@ -78,7 +78,7 @@ const processAliasModes = (variables) => {
 
     for (const aliasMode of aliasModes) {
       const modeBasedVariable = { ...variable }
-      modeBasedVariable.values = modeBasedVariable.values.replace(new RegExp(`({${aliasCollectionName}.)`, "i"), `{${aliasCollectionName}.${aliasMode.name}.`)
+      modeBasedVariable.values = modeBasedVariable.values.replace(new RegExp(`({${aliasCollectionName}.)`, 'i'), `{${aliasCollectionName}.${aliasMode.name}.`)
 
       collector.push(modeBasedVariable)
     }
@@ -88,7 +88,7 @@ const processAliasModes = (variables) => {
 }
 
 export const getVariables = (figma: PluginAPI, settings: Settings) => {
-  const excludedCollectionIds = figma.variables.getLocalVariableCollections().filter(collection => !['.', '_', ...settings.exclusionPrefix.split(',')].includes(collection.name.charAt(0))).map(collection => collection.id);
+  const excludedCollectionIds = figma.variables.getLocalVariableCollections().filter(collection => !['.', '_', ...settings.exclusionPrefix.split(',')].includes(collection.name.charAt(0))).map(collection => collection.id)
   // get collections
   const collections = Object.fromEntries(figma.variables.getLocalVariableCollections().map((collection) => [collection.id, collection]))
   // get variables
@@ -99,7 +99,7 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
     // return each mode value as a separate variable
     return Object.entries(variable.valuesByMode).map(([id, value]) => {
       // Only add mode if there's more than one
-      let addMode = settings.modeReference && modes.length > 1
+      const addMode = settings.modeReference && modes.length > 1
       return {
         ...extractVariable(variable, value),
         // name is contstructed from collection, mode and variable name
@@ -118,5 +118,5 @@ export const getVariables = (figma: PluginAPI, settings: Settings) => {
       }
     })
   })
-  return settings.modeReference ? processAliasModes(variables.flat()) : variables.flat();
+  return settings.modeReference ? processAliasModes(variables.flat()) : variables.flat()
 }
